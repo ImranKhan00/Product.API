@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-using Product.API.Data;
-using Product.API.Respositories.Interfaces;
+using Products.API.Data;
+using Products.API.Models.Domain;
+using Products.API.Models.DTO_s;
+using Products.API.Respositories.Interfaces;
 
-namespace Product.API.Respositories.Implementation
+namespace Products.API.Respositories.Implementation
 {
   public class ProductRepository : IProductRepository
   {
@@ -31,14 +33,49 @@ namespace Product.API.Respositories.Implementation
       return null;
     }
 
-    public async Task<IEnumerable<Models.Domain.Product?>> GetAllAsync()
+    public async Task<IEnumerable<Models.Domain.Product>> GetAllAsync()
     {
-      return await _context.Products.ToListAsync();
+      return await _context.Products.Include(x => x.Categories).ToListAsync();
     }
 
     public async Task<Models.Domain.Product?> GetByIdAsync(int id)
     {
-      return await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+      return await _context.Products.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<List<ProductCategory>> GetTotalQuantitySoldByCategoryAsync()
+    {
+
+      return await _context.ProductCategories
+           .Include(pc => pc.Products)
+           .Select(pc => new ProductCategory
+           {
+             ProductCategoryId = pc.ProductCategoryId,
+             CategoryName = pc.CategoryName,
+             Products = pc.Products.Select(p => new Product
+             {
+               Id = p.Id,
+               Name = p.Name,
+               QuantitySold = p.QuantitySold
+             }).ToList()
+           })
+           .ToListAsync();
+
+    }
+
+    public async  Task<List<CategoryTotalQuantitySoldDTO>> GetTotalQuantitySoldPerCategory()
+    {
+        var products =  _context.Products.ToList();
+        var result = products
+            .SelectMany(p => p.Categories, (product, category) => new { product, category })
+            .GroupBy(pc => pc.category)
+            .Select(group => new CategoryTotalQuantitySoldDTO
+            {
+              CategoryName = group.Key.CategoryName,
+              TotalQuantitySold = group.Sum(pc => pc.product.QuantitySold)
+            })
+            .ToList();
+        return result;
     }
 
     //public IEnumerable<Models.Domain.Product> GetSoldItems(IEnumerable<Models.Domain.Product> products)

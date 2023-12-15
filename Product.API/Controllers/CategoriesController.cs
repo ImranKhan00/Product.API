@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Product.API.Models.Domain;
-using Product.API.Models.DTO_s;
-using Product.API.Respositories.Implementation;
-using Product.API.Respositories.Interfaces;
+using Products.API.Models.Domain;
+using Products.API.Models.DTO_s;
+using Products.API.Respositories.Implementation;
+using Products.API.Respositories.Interfaces;
 
-namespace Product.API.Controllers
+namespace Products.API.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]

@@ -1,4 +1,4 @@
-﻿namespace Product.API.Models.DTO_s
+﻿namespace Products.API.Models.DTO_s
 {
   public class CategoryTotalQuantitySoldDTO
   {

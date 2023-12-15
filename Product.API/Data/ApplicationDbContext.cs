@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-using Product.API.Models.Domain;
+using Products.API.Models.Domain;
 
-namespace Product.API.Data
+namespace Products.API.Data
 {
     public class ApplicationDbContext:DbContext
   {
@@ -13,6 +13,7 @@ namespace Product.API.Data
 
         public DbSet<Models.Domain.Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
 
 
 

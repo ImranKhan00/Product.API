@@ -1,4 +1,4 @@
-﻿namespace Product.API.Models.DTO_s
+﻿namespace Products.API.Models.DTO_s
 {
   public class CreateProductRequestDTO
   {
@@ -9,5 +9,8 @@
     public string Remarks { get; set; }
     public string Status { get; set; }
     public bool IsSoldOut { get; set; }
+
+    //for using of the categories
+    public int[] Categories { get; set; }
   }
 }

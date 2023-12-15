@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Product.API.Data;
-using Product.API.Respositories.Implementation;
-using Product.API.Respositories.Interfaces;
+using Products.API.Data;
+using Products.API.Respositories.Implementation;
+using Products.API.Respositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

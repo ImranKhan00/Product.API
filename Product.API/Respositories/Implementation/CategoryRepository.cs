@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-using Product.API.Data;
-using Product.API.Models.Domain;
-using Product.API.Respositories.Interfaces;
+using Products.API.Data;
+using Products.API.Models.Domain;
+using Products.API.Respositories.Interfaces;
 
-namespace Product.API.Respositories.Implementation
+namespace Products.API.Respositories.Implementation
 {
   public class CategoryRepository : ICategoryRepository
   {

@@ -1,6 +1,6 @@
-﻿using Product.API.Models.Domain;
+﻿using Products.API.Models.Domain;
 
-namespace Product.API.Respositories.Interfaces
+namespace Products.API.Respositories.Interfaces
 {
   public interface ICategoryRepository
   {
