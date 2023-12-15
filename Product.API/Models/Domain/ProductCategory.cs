@@ -5,5 +5,6 @@
     public int ProductCategoryId { get; set; }
     public string CategoryName { get; set; }
     public List<Product> Products { get; set; }
+    public int TotalSold { get; set; }
   }
 }

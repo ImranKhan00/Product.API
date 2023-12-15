@@ -57,7 +57,8 @@ namespace Products.API.Respositories.Implementation
                Id = p.Id,
                Name = p.Name,
                QuantitySold = p.QuantitySold
-             }).ToList()
+             }).ToList(),
+             TotalSold = pc.Products.Sum(p => p.QuantitySold)
            })
            .ToListAsync();
 
