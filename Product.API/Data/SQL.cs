@@ -2,17 +2,12 @@
 {
 	public class SQL
 	{
-		//Query for the given scenario
-		//		SELECT
-		//	c.category_name,
-		//	SUM(p.quantity_sold) AS total_quantity_sold
-		//FROM
+    //SELECT c.Id CategoryId , c.Name CategoryName, SUM(sli.SalePrice* sli.Quantity)  Amount FRoM SaleLineItems sli
+    //INNER JOIN Products p
+    //ON p.Id = sli.productId
+    //INNER JOIN Categories c
+    //ON c.Id = p.CategoryId
+    //GROUP BY c.Id, c.Name
 
-		//	Categories c
-		//JOIN
-		//	Products p ON c.category_id = p.category_id
-		//GROUP BY
-
-		//	c.category_name;
-	}
+  }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Products.API.Data;
 
@@ -11,9 +12,10 @@ using Products.API.Data;
 namespace Product.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231216105603_full")]
+    partial class full
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,9 +151,6 @@ namespace Product.API.Migrations
                     b.Property<double>("ActualPrice")
                         .HasColumnType("float");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<int>("PurchaseInvoiceId")
                         .HasColumnType("int");
 
@@ -159,8 +158,6 @@ namespace Product.API.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
 
                     b.HasIndex("PurchaseInvoiceId");
 
@@ -336,12 +333,6 @@ namespace Product.API.Migrations
 
             modelBuilder.Entity("Product.API.Models.Domain.PurchaseLineItem", b =>
                 {
-                    b.HasOne("Product.API.Models.Domain.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Product.API.Models.Domain.PurchaseInvoice", "Invoice")
                         .WithMany("Items")
                         .HasForeignKey("PurchaseInvoiceId")
@@ -349,8 +340,6 @@ namespace Product.API.Migrations
                         .IsRequired();
 
                     b.Navigation("Invoice");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Product.API.Models.Domain.SaleInvoice", b =>

@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Products.API.Models.Domain;
+using Product.API.Models.Domain;
+
 using Products.API.Models.DTO_s;
 using Products.API.Respositories.Implementation;
 using Products.API.Respositories.Interfaces;
@@ -23,19 +24,9 @@ namespace Products.API.Controllers
     //Get All Categories
     public async Task<IActionResult> GetAllCategories()
     {
-      var categories = await _categoryRepository.GetAllAsync();
+      var categories =  _categoryRepository.GetAll();
       //map model to DTO
-      var response = new List<CategoryDTO>();
-      foreach (var category in categories)
-      {
-        response.Add(new CategoryDTO
-        {
-          Id = category.Id,
-          CategoryName = category.CategoryName,
-          Description = category.Description,
-        });
-      }
-      return Ok(response);
+      return Ok(categories.ToList());
     }
 
     [HttpGet]
@@ -43,18 +34,12 @@ namespace Products.API.Controllers
     public async Task<IActionResult> GetCategoryById(int id)
     {
       //getting category by id
-      var category = await _categoryRepository.GetByIdAsync(id);
+      var category =  _categoryRepository.Get(id);
       if (category is null)
       {
         return NotFound();
       }
-      var response = new CategoryDTO
-      {
-        Id = category.Id,
-        CategoryName = category.CategoryName,
-        Description = category.Description,
-      };
-      return Ok(response);
+      return Ok(category);
     }
 
     [HttpPost]
@@ -63,37 +48,19 @@ namespace Products.API.Controllers
       //Convert DTO to domain
       var category = new Category
       {
-        CategoryName = request.CategoryName,
-        Description = request.Description
+        Name = request.CategoryName,
       };
-
-      category = await _categoryRepository.CreateAsync(category);
-      //Convert Domain to DTO
-      var response = new CategoryDTO
-      {
-       CategoryName = category.CategoryName,
-       Description = category.Description
-      };
-      return Ok(response);
+      category =  _categoryRepository.Add(category);
+      return Ok(category);
     }
 
     [HttpDelete]
     [Route("{id:int}")]
     public async Task<IActionResult> DeleteCategory([FromRoute] int id)
     {
-      var deleteCategory = await _categoryRepository.DeleteAsync(id);
-      if (deleteCategory == null)
-      {
-        return NotFound();
-      }
-      //Convert Domain Model to DTO
-      var response = new CategoryDTO
-      {
-        Id = deleteCategory.Id,
-        CategoryName = deleteCategory.CategoryName,
-        Description = deleteCategory.Description,
-      };
-      return Ok(response);
+      var deleteCategory = _categoryRepository.Delete(_categoryRepository.Get(id));
+    
+      return Ok(deleteCategory);
     }
 
     [HttpPut]
@@ -104,26 +71,18 @@ namespace Products.API.Controllers
       var category = new Category
       {
         Id = id,
-        CategoryName = request.CategoryName,
-        Description = request.Description,
+        Name = request.CategoryName,
       };
 
       //Call Repository to Update Blogpost Domain Model
-      var updateCategory = await _categoryRepository.UpdateAsync(category);
+      var updateCategory =  _categoryRepository.Update(id, category);
       //check for null
       if (updateCategory == null)
       {
         return NotFound();
       }
 
-      //convert Domain Model to DTO
-      var response = new CategoryDTO
-      {
-        Id = category.Id,
-        CategoryName = category.CategoryName,
-        Description = category.Description,
-      };
-      return Ok(response);
+      return Ok(updateCategory);
     }
   }
 }

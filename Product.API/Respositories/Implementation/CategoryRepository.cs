@@ -1,18 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+using Product.API.Models.Domain;
+using Product.API.Respositories.Implementation;
+
 using Products.API.Data;
-using Products.API.Models.Domain;
 using Products.API.Respositories.Interfaces;
 
 namespace Products.API.Respositories.Implementation
 {
-  public class CategoryRepository : ICategoryRepository
+  public class CategoryRepository :BaseRepository<Category>, ICategoryRepository
   {
     private readonly ApplicationDbContext _context;
-    public CategoryRepository(ApplicationDbContext  context)
+    public CategoryRepository(ApplicationDbContext  context):base(context)
     {
       _context = context;
     }
+    public Category Get(int id) => base.GetAll().FirstOrDefault(x=>x.Id==id);
+
     public async Task<Category> CreateAsync(Category category)
     {
       await _context.Categories.AddAsync(category);

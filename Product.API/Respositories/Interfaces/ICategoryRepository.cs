@@ -1,13 +1,12 @@
-﻿using Products.API.Models.Domain;
+﻿
+using Product.API.Models.Domain;
+
+using Repositories;
 
 namespace Products.API.Respositories.Interfaces
 {
-  public interface ICategoryRepository
+  public interface ICategoryRepository:IRepository<Category>
   {
-    Task<Category> CreateAsync(Category category);
-    Task<IEnumerable<Category?>> GetAllAsync();
-    Task<Category?> GetByIdAsync(int id);
-    Task<Category?> UpdateAsync(Category category);
-    Task<Category?> DeleteAsync(int id);
+ 
   }
 }
