@@ -92,7 +92,7 @@ namespace Product.API.Services
         invoice.NetProfit = invoice.Items?.Sum(x => x.NetProfit * x.Quantity) ?? 0;
 
         // calculate arrears
-        invoice.Arrears = _GetArrears(invoice.CustomerId) + invoice.NetAmount ?? 0 - invoice.PaidAmount ?? 0;
+        //invoice.Arrears = _GetArrears(invoice.CustomerId) + invoice.NetAmount ?? 0 - invoice.PaidAmount ?? 0;
 
         // if invoice is cash invoice, set paid amount to net amount
         if (request.IsCashInvoice)
@@ -104,25 +104,7 @@ namespace Product.API.Services
         return invoice;
       }
 
-      #region PRIVATE METHODS
-
-      private double _GetArrears(int customerId)
-      {
-        return _UnitOfWork
-            .SaleInvoiceRepository
-            .GetAll()
-            .Where(x => x.CustomerId == customerId)
-            //.ToList()
-            //.Sum(x => x.NetAmount - x.PaidAmount);
-            .OrderByDescending(x => x.InvoiceNumber)
-            //.ThenByDescending(x=>x.Id)
-            .FirstOrDefault()?
-            .Arrears ?? 0;
-        //var invoices = _UnitOfWork.SaleInvoiceRepository.GetAll().Where(x => x.CustomerId == customerId);
-        //return invoices.Sum(x => (x.NetAmount??0)  - (x.PaidAmount??0));
-      }
-
-      #endregion
+   
     }
   
 }

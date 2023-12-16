@@ -43,14 +43,20 @@ namespace PigeonPad.Services
     {
       var category = unitOfWork.CategoryRepository.Get(categoryId);
       category.Name = request.Name;
-      unitOfWork.CategoryRepository.Update(categoryId,category);
+      unitOfWork.CategoryRepository.Update(categoryId, category);
       unitOfWork.Complete();
       return category;
     }
 
     public object? Delete(int id)
     {
-      throw new NotImplementedException();
+      var existingCategory = unitOfWork.CategoryRepository.Get(id);
+      if (existingCategory != null)
+      {
+        unitOfWork.CategoryRepository.Delete(existingCategory);
+        unitOfWork.Complete();
+      }
+      return existingCategory;
     }
   }
 }

@@ -1,88 +1,56 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Product.API.Models.Domain;
+using PigeonPad.Services;
 
-using Products.API.Models.DTO_s;
-using Products.API.Respositories.Implementation;
-using Products.API.Respositories.Interfaces;
+using Product.API.Models.Request;
 
-namespace Products.API.Controllers
+
+namespace Categories.API.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
   public class CategoriesController : ControllerBase
   {
 
-    private readonly ICategoryRepository _categoryRepository;
-    public CategoriesController(ICategoryRepository categoryRepository)
+    CategoryService _Service;
+    public CategoriesController(CategoryService service)
     {
-      _categoryRepository = categoryRepository;
+      _Service = service;
     }
 
     [HttpGet]
     //Get All Categories
-    public async Task<IActionResult> GetAllCategories()
+    public async Task<IActionResult> GetAll()
     {
-      var categories =  _categoryRepository.GetAll();
-      //map model to DTO
-      return Ok(categories.ToList());
+      return Ok(_Service.GetAll());
     }
 
     [HttpGet]
-    [Route("{id:int}")]
-    public async Task<IActionResult> GetCategoryById(int id)
+    [Route("{id}")]
+    public async Task<IActionResult> Get(int id)
     {
-      //getting category by id
-      var category =  _categoryRepository.Get(id);
-      if (category is null)
-      {
-        return NotFound();
-      }
-      return Ok(category);
+      return Ok(_Service.GetById(id));
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDTO request)
+    public async Task<IActionResult> Create([FromBody] CategoryRequest request)
     {
-      //Convert DTO to domain
-      var category = new Category
-      {
-        Name = request.CategoryName,
-      };
-      category =  _categoryRepository.Add(category);
-      return Ok(category);
+      return Ok(_Service.Add(request));
     }
 
     [HttpDelete]
-    [Route("{id:int}")]
-    public async Task<IActionResult> DeleteCategory([FromRoute] int id)
+    [Route("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
     {
-      var deleteCategory = _categoryRepository.Delete(_categoryRepository.Get(id));
-    
-      return Ok(deleteCategory);
+      return Ok(_Service.Delete(id));
     }
 
     [HttpPut]
     [Route("{id:int}")]
-    public async Task<IActionResult> UpdateCategory([FromRoute] int id, UpdateCategoryDTO request)
+    public async Task<IActionResult> Update([FromRoute] int id, CategoryRequest request)
     {
-      //Convert DTO to domain
-      var category = new Category
-      {
-        Id = id,
-        Name = request.CategoryName,
-      };
-
-      //Call Repository to Update Blogpost Domain Model
-      var updateCategory =  _categoryRepository.Update(id, category);
-      //check for null
-      if (updateCategory == null)
-      {
-        return NotFound();
-      }
-
-      return Ok(updateCategory);
+      return Ok(_Service.Update(id, request));
     }
   }
 }

@@ -1,7 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
+using PigeonPad.Services;
+
+using Product.API.Models.Domain;
 using Product.API.Models.Request;
 
+using Products.API.Models.DTO_s;
+using Products.API.Respositories.Implementation;
 using Products.API.Respositories.Interfaces;
 
 namespace Products.API.Controllers
@@ -11,75 +17,44 @@ namespace Products.API.Controllers
   public class ProductsController : ControllerBase
   {
 
-    private readonly IProductRepository _productRepository;
-    public ProductsController(IProductRepository productRepository)
+    ProductService _Service;
+    public ProductsController(ProductService service)
     {
-      _productRepository = productRepository;
+      _Service = service;
     }
 
     [HttpGet]
     //Get All Products
-    public async Task<IActionResult> GetAllProducts()
+    public async Task<IActionResult> GetAll()
     {
-      var categories =  _productRepository.GetAll();
-      //map model to DTO
-      return Ok(categories.ToList());
+      return Ok(_Service.GetAll());
     }
 
     [HttpGet]
-    [Route("{id:int}")]
-    public async Task<IActionResult> GetProductById(int id)
+    [Route("{id}")]
+    public async Task<IActionResult> Get(int id)
     {
-      //getting product by id
-      var product =  _productRepository.Get(id);
-      if (product is null)
-      {
-        return NotFound();
-      }
-      return Ok(product);
+      return Ok(_Service.GetById(id));
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateProduct([FromBody] ProductRequest request)
+    public async Task<IActionResult> Create([FromBody] ProductRequest request)
     {
-      //Convert DTO to domain
-      var product = new Product.API.Models.Domain.Product
-      {
-        Name = request.Name,
-      };
-      product =  _productRepository.Add(product);
-      return Ok(product);
+      return Ok(_Service.Add(request));
     }
 
     [HttpDelete]
-    [Route("{id:int}")]
-    public async Task<IActionResult> DeleteProduct([FromRoute] int id)
+    [Route("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
     {
-      var deleteProduct = _productRepository.Delete(_productRepository.Get(id));
-    
-      return Ok(deleteProduct);
+      return Ok(_Service.Delete(id));
     }
 
     [HttpPut]
     [Route("{id:int}")]
-    public async Task<IActionResult> UpdateProduct([FromRoute] int id, ProductRequest request)
+    public async Task<IActionResult> Update([FromRoute] int id, ProductRequest request)
     {
-      //Convert DTO to domain
-      var product = new Product.API.Models.Domain.Product
-      {
-        Id = id,
-        Name = request.Name,
-      };
-
-      //Call Repository to Update Blogpost Domain Model
-      var updateProduct =  _productRepository.Update(id, product);
-      //check for null
-      if (updateProduct == null)
-      {
-        return NotFound();
-      }
-
-      return Ok(updateProduct);
+      return Ok(_Service.Update(id, request));
     }
   }
 }

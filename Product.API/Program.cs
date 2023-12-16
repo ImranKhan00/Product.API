@@ -27,6 +27,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddScoped<SaleInvoiceService>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<ProductService>();
 
 
 builder.Services.AddControllers()
