@@ -11,7 +11,7 @@ namespace Product.API.Services
   {
     #region Private Fields
     #endregion
-    ApplicationDbContext db;// =new ImsDbContext();
+    ApplicationDbContext db;
     public IUserRepository UserRepository { get; private set; }
     public ICategoryRepository CategoryRepository { get; private set; }
     public ICustomerRepository CustomerRepository { get; private set; }

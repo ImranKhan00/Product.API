@@ -47,6 +47,7 @@ namespace PigeonPad.Services
     {
       var product = unitOfWork.ProductRepository.Get(id);
       product.Name = request.Name;
+      product.Description = request.Description;
       product.SalePrice= request.SalePrice;
       product.PurchasePrice = request.PurchasePrice;
       product.CategoryId = request.CategoryId;
@@ -57,7 +58,13 @@ namespace PigeonPad.Services
 
     public object? Delete(int id)
     {
-      throw new NotImplementedException();
+      var existingProduct = unitOfWork.ProductRepository.Get(id);
+      if (existingProduct != null)
+      {
+        unitOfWork.ProductRepository.Delete(existingProduct);
+        unitOfWork.Complete();
+      }
+      return existingProduct;
     }
   }
 }
