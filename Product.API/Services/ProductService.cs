@@ -21,6 +21,7 @@ namespace PigeonPad.Services
       var newCategory = new Product.API.Models.Domain.Product
       {
         Name = request.Name,
+        Description = request.Description,
         SalePrice = request.SalePrice,
         PurchasePrice = request.PurchasePrice,
         CategoryId = request.CategoryId,
